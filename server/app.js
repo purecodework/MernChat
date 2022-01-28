@@ -11,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 
+//cors
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Headers", "*");
@@ -29,6 +30,7 @@ app.get("/api/v1/chats/:id", (req, res) => {
   res.send(chat);
 });
 
+//404 page
 app.use((req, res) => {
   res.status(404).json({ msg: "route not exist" });
 });
