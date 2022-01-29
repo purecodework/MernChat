@@ -13,4 +13,10 @@ router.post("/login", usersController.login);
 
 router.get("/test", usersController.test);
 
+router.get(
+  "/findUser",
+  [check("account").not().isEmpty()],
+  usersController.findUser
+);
+
 module.exports = router;
