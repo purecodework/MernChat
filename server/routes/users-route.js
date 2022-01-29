@@ -11,4 +11,6 @@ router.post(
 
 router.post("/login", usersController.login);
 
+router.get("/test", usersController.test);
+
 module.exports = router;

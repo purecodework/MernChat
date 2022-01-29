@@ -43,7 +43,7 @@ const signup = async (req, res) => {
 
 const login = async (req, res, next) => {
   const { account, password } = req.body;
-
+  console.log("acc,ps:" + account, password);
   if (!account || !password) {
     res.status(400).json({
       msg: "Missing account or password",
@@ -59,6 +59,8 @@ const login = async (req, res, next) => {
         password,
         userInstance.password
       );
+      console.log(userInstance.password);
+      console.log("isPasswordValid" + isPasswordValid.toString());
 
       if (isPasswordValid) {
         let token = await jwt.sign(
@@ -85,5 +87,18 @@ const login = async (req, res, next) => {
   }
 };
 
+const test = async (req, res) => {
+  try {
+    let allUsers = await User.find();
+    res.status(201).json({
+      msg: "all users",
+      data: allUsers,
+    });
+  } catch (error) {
+    res.json({ error });
+  }
+};
+
 exports.signup = signup;
 exports.login = login;
+exports.test = test;
