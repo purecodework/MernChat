@@ -5,7 +5,7 @@ const data = require("./data");
 const express = require("express");
 
 const usersRoute = require("./routes/users-route");
-const res = require("express/lib/response");
+const chatsRoute = require("./routes/chats-route");
 
 const app = express();
 
@@ -23,12 +23,12 @@ app.get("/", (req, res) => res.json({ msg: "Hi" }));
 
 app.use("/api/v1/users", usersRoute);
 
-app.get("/api/v1/chats", (req, res) => res.send(data.data));
+app.use("/api/v1/chats", chatsRoute);
 
-app.get("/api/v1/chats/:id", (req, res) => {
-  const chat = data.data.find((x) => x._id === req.params.id);
-  res.send(chat);
-});
+// app.get("/api/v1/chats/:id", (req, res) => {
+//   const chat = data.data.find((x) => x._id === req.params.id);
+//   res.send(chat);
+// });
 
 //404 page
 app.use((req, res) => {

@@ -73,7 +73,7 @@ const login = async (req, res, next) => {
   try {
     foundUser = await User.findOne({ account: account });
   } catch (error) {
-    returnres.status(500).json({ msg: "could not log you in" });
+    return res.status(500).json({ msg: "could not log you in" });
   }
 
   if (!foundUser) {
@@ -103,7 +103,7 @@ const login = async (req, res, next) => {
   }
   try {
     res.status(200).json({
-      // userId: foundUser.id,
+      userId: foundUser.id,
       token: token,
     });
   } catch (e) {
