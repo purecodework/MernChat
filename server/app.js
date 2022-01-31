@@ -1,11 +1,11 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const mongoose = require("mongoose");
-const data = require("./data");
 const express = require("express");
 
 const usersRoute = require("./routes/users-route");
 const chatsRoute = require("./routes/chats-route");
+const messagesRoute = require("./routes/messages-route");
 
 const app = express();
 
@@ -24,6 +24,8 @@ app.get("/", (req, res) => res.json({ msg: "Hi" }));
 app.use("/api/v1/users", usersRoute);
 
 app.use("/api/v1/chats", chatsRoute);
+
+app.use("/api/v1/messages", messagesRoute);
 
 // app.get("/api/v1/chats/:id", (req, res) => {
 //   const chat = data.data.find((x) => x._id === req.params.id);

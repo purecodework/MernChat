@@ -2,6 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
+const Chat = require("../models/chat");
 
 const signup = async (req, res) => {
   const errors = validationResult(req);
@@ -11,6 +12,7 @@ const signup = async (req, res) => {
       .json({ msg: "Account and password should not be empty" });
   }
   const { account, password } = req.body;
+
   let foundUser;
   try {
     foundUser = await User.findOne({ account: account });
@@ -34,7 +36,7 @@ const signup = async (req, res) => {
     account,
     password: hashedPassword,
   });
-
+  // save to DB
   try {
     await createdUser.save();
   } catch (error) {
@@ -110,6 +112,23 @@ const login = async (req, res, next) => {
     res.json({ msg: "something wrongs" });
   }
 };
+// fetch all chats for user
+const fetchChats = async (req, res) => {
+  const userId = req.params.uid;
+  let chats;
+
+  try {
+    console.log(userId);
+    chats = await Chat.find({ users: { $in: [userId] } });
+    if (chats) {
+      res.status(201).json({ chats });
+    } else {
+      res.status(400).json({ msg: "not found" });
+    }
+  } catch (error) {
+    return res.json({ msg: "cannot fetch your chats data" });
+  }
+};
 
 const test = async (req, res) => {
   try {
@@ -150,3 +169,4 @@ exports.signup = signup;
 exports.login = login;
 exports.test = test;
 exports.findUser = findUser;
+exports.fetchChats = fetchChats;
