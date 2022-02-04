@@ -11,10 +11,10 @@ const chatSchema = new Schema(
         required: true,
       },
     ],
-    // latestMessage: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "Message",
-    // },
+    latestMessage: {
+      type: "String",
+      // ref: "Message",
+    },
     // groupAdmin: {
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "User",

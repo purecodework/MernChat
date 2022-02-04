@@ -9,7 +9,19 @@ const messagesRoute = require("./routes/messages-route");
 
 const app = express();
 
+const server = app.listen(process.env.PORT || 8080);
+
 app.use(express.json());
+const io = require("socket.io")(server, {
+  pintTimeout: 10000,
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("IO is on");
+});
 
 //cors
 app.use((req, res, next) => {
@@ -39,6 +51,6 @@ app.use((req, res) => {
 
 mongoose
   .connect(process.env.DB_URI)
-  .then(() => app.listen(process.env.PORT || 8080))
+  // .then(() => app.listen(process.env.PORT || 8080))
   .then(() => console.log("DB connected"))
   .catch((e) => console.log(e));

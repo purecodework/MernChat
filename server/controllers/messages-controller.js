@@ -1,15 +1,25 @@
 const Chat = require("../models/chat");
 const Message = require("../models/message");
 
-// create chat
+// create msg
 const createMessage = async (req, res) => {
   const { chatId, sender, content } = req.body;
 
   let createdMessage;
+
+  let updatedChat;
   try {
     const createdMessage = new Message({ chatId, sender, content });
 
     await createdMessage.save();
+
+    // update latest message in chat
+    const updatedChat = await Chat.findOneAndUpdate(
+      { _id: chatId },
+      { $set: { latestMessage: content } }
+    );
+    await updatedChat.save();
+
     res.status(201).json({ msg: "Success", chatId, sender, content });
   } catch (error) {
     return res.status(500).json({ msg: "Cannot save new chat to Database" });
@@ -19,12 +29,13 @@ const createMessage = async (req, res) => {
 // fetch all messages in chat
 const fetchMessages = async (req, res) => {
   const chatId = req.params.cid;
-  console.log("req receive" + chatId);
+  console.log("fetch messages for chatID" + chatId);
   let messages;
   try {
     messages = await Message.find({
       chatId: chatId,
     });
+    console.log("messanges" + messages);
 
     res.status(201).json(messages);
   } catch (error) {

@@ -5,11 +5,14 @@ const Schema = mongoose.Schema;
 const messageSchema = new Schema(
   {
     chatId: {
-      type: String,
+      type: "String",
+      required: true,
+      // ref: "Chat",
       // type: { type: mongoose.Schema.Types.ObjectId, ref: "Chat" },
     },
     sender: {
-      type: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      type: String,
+      required: true,
     },
 
     content: { type: String },

@@ -20,7 +20,7 @@ router.get("/test", usersController.test);
 
 // find a user
 router.get(
-  "/findUser",
+  "/findUser/:account",
   [check("account").not().isEmpty()],
   usersController.findUser
 );

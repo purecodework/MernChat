@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const Chat = require("../models/chat");
+const Message = require("../models/message");
 
 const signup = async (req, res) => {
   const errors = validationResult(req);
@@ -112,14 +113,29 @@ const login = async (req, res, next) => {
     res.json({ msg: "something wrongs" });
   }
 };
+
+// function getUserWithPosts(username) {
+//   return User.findOne({ username: username })
+//     .populate("posts")
+//     .exec((err, posts) => {
+//       console.log("Populated User " + posts);
+//     });
+// }
 // fetch all chats for user
 const fetchChats = async (req, res) => {
   const userId = req.params.uid;
   let chats;
+  let latestMessange;
+  let chatsIDs;
 
   try {
     console.log(userId);
-    chats = await Chat.find({ users: { $in: [userId] } });
+    chats = await Chat.find({ users: { $in: [userId] } })
+      .populate("users", "account")
+      .sort({ updatedAt: -1 });
+    // .populate("latestMessage");
+    // .populate("messages");
+
     if (chats) {
       res.status(201).json({ chats });
     } else {
@@ -143,18 +159,19 @@ const test = async (req, res) => {
 };
 
 const findUser = async (req, res) => {
+  console.log("find user called");
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     res.status(422).json({ msg: "Account must not be empty" });
   }
-  const { account } = req.body;
-  console.log(account);
+  const { account } = req.params;
+  console.log("search for account:" + account);
 
   try {
     const foundUser = await User.findOne({ account: account });
     if (foundUser) {
-      res.status(200).json({ msg: "found this user", foundUser });
+      res.status(200).json({ foundUser });
     }
     res.status;
   } catch (error) {
