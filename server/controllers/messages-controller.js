@@ -29,13 +29,11 @@ const createMessage = async (req, res) => {
 // fetch all messages in chat
 const fetchMessages = async (req, res) => {
   const chatId = req.params.cid;
-  console.log("fetch messages for chatID" + chatId);
   let messages;
   try {
     messages = await Message.find({
       chatId: chatId,
     });
-    console.log("messanges" + messages);
 
     res.status(201).json(messages);
   } catch (error) {

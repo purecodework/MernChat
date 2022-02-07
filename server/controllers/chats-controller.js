@@ -29,7 +29,7 @@ const createChat = async (req, res) => {
     const createdChat = new Chat({
       users: [senderId, receiverId],
     });
-    console.log(senderId, receiverId);
+
     await createdChat.save();
     res.status(201).json({ msg: "new chat saved", senderId });
   } catch (error) {

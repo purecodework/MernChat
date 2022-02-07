@@ -64,7 +64,6 @@ const signup = async (req, res) => {
 
 const login = async (req, res, next) => {
   const { account, password } = req.body;
-  console.log("acc,ps:" + account, password);
 
   if (!account || !password) {
     return res.status(400).json({
@@ -114,13 +113,6 @@ const login = async (req, res, next) => {
   }
 };
 
-// function getUserWithPosts(username) {
-//   return User.findOne({ username: username })
-//     .populate("posts")
-//     .exec((err, posts) => {
-//       console.log("Populated User " + posts);
-//     });
-// }
 // fetch all chats for user
 const fetchChats = async (req, res) => {
   const userId = req.params.uid;
@@ -129,7 +121,6 @@ const fetchChats = async (req, res) => {
   let chatsIDs;
 
   try {
-    console.log(userId);
     chats = await Chat.find({ users: { $in: [userId] } })
       .populate("users", "account")
       .sort({ updatedAt: -1 });
@@ -159,14 +150,12 @@ const test = async (req, res) => {
 };
 
 const findUser = async (req, res) => {
-  console.log("find user called");
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     res.status(422).json({ msg: "Account must not be empty" });
   }
   const { account } = req.params;
-  console.log("search for account:" + account);
 
   try {
     const foundUser = await User.findOne({ account: account });
