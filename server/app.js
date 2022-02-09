@@ -17,7 +17,6 @@ const io = socketio(server, {
 });
 
 const findSocketId = (userId) => {
-  console.log("finding... socket id for " + userId);
   let user = users.find((u) => u.userId === userId);
   if (user) {
     return user.socketId;
@@ -25,28 +24,18 @@ const findSocketId = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  console.log("socket connected");
-
   socket.on("setup", (userId) => {
-    console.log("user " + userId + "joined, socketId" + socket.id);
-    console.log("socketID is" + socket.id);
-    let user = { userId: userId, socketId: socket.id };
-    // check if array contains user already
-    let foundUser = users.find((u) => u.userId === userId);
-    if (foundUser) {
-      console.log("user already exist");
-      return;
+    // !! check if user connected before, if had, update socketID
+    let userIndex = users.findIndex((u) => u.userId === userId);
+
+    if (userIndex >= 0) {
+      let newUsers = [...users];
+      newUsers[userIndex].socketId = socket.id;
     } else {
+      let user = { userId: userId, socketId: socket.id };
       users = [...users, user];
-      console.log("new user");
     }
   });
-
-  // socket.on("join chat", (chatId) => {
-  //   console.log("join chat");
-  //   socket.join(chatId);
-  //   console.log("join room " + chatId);
-  // });
 
   socket.on("send message", ({ chatId, sender, takerId, content }) => {
     let takerSocketId = findSocketId(takerId);
